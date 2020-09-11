@@ -14,4 +14,4 @@ build/
 *.egg-info/
 
 #NEVER commit security stuff. Only for use in application.
-credentials.txt
+*.pem
