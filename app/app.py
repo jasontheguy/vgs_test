@@ -19,18 +19,23 @@ def helper_func_redacted_data():
     #Basically takes credit card form fields and makes it JSON to send for teknization
     card_number = request.form['number']
     expiration = request.form['expiry']
-    cvv_code=request.form['cvv']
-    info_to_secure = {"card_number":card_number,"expiration":expiration,"cvv_code":cvv_code}
-    
+    cvv_code = request.form['cvv']
+    info_to_secure = {
+        "card_number": card_number,
+        "expiration": expiration,
+        "cvv_code": cvv_code
+    }
+
     #Generated with Postman during testing
     url = "https://tntkp8h2mvu.sandbox.verygoodproxy.com/post"
     payload = json.dumps(info_to_secure)
-    headers = {'Authorization': 'Basic YXBwbGVzZWVkY2FzdDBAZ21haWwuY29tOkZyb2RvITIz',
-    'Content-Type': 'application/json'
-              }
-    response = requests.request("POST", url, headers=headers, data = payload)
-    #I've tried to make it pretty but nothing has worked yet. 
-    json_data=json.loads(response.text)
+    headers = {
+        'Authorization': 'Basic YXBwbGVzZWVkY2FzdDBAZ21haWwuY29tOkZyb2RvITIz',
+        'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    #I've tried to make it pretty but nothing has worked yet.
+    json_data = json.loads(response.text)
     return json_data
 
 
@@ -39,27 +44,29 @@ def helper_func_redacted_data():
 def main_page():
     return render_template("splash.html")
 
+
 @app.route('/card.html')
 def card():
     # This renders the fancy credit card form. This data is collected on the generate route below:
     return render_template("card.html")
 
+
 @app.route('/generate', methods=['POST'])
 def generate():
     tokenized_data = helper_func_redacted_data()
-    #Note: Credentals are public and this is terrible I know. But, I could not get my environmental variable to be read and interpolated for some reason.
-    #All of them are in my .bashrc and I sourced it, but it still wasn't playing nice.
-    os.environ['HTTPS_PROXY'] = "https://{}:{}@{}.SANDBOX.verygoodproxy.com:8080".format(USERNAME, PASSWORD, TENANT_ID)
+    os.environ[
+        'HTTPS_PROXY'] = "https://{}:{}@{}.SANDBOX.verygoodproxy.com:8080".format(
+            USERNAME, PASSWORD, TENANT_ID)
 
-    #This is my public facing API bucket as I couldn't get the echo server to respond properly.
     res = requests.post('https://echo.apps.verygood.systems/post',
-                         json=tokenized_data,
-                         verify='/home/flipz/Code/vgs_test/app/cert.pem')
-    json_unredacted=json.loads(res.text)                 
+                        json=tokenized_data,
+                        verify='/home/flipz/Code/vgs_test/app/cert.pem')
+    json_unredacted = json.loads(res.text)
     #This processes the form and returns a JSON k,v pair
-    return render_template('redacted.html',tokenized=tokenized_data['data'], detokenized=json_unredacted["json"]["json"])
+    return render_template('redacted.html',
+                           tokenized=tokenized_data['data'],
+                           detokenized=json_unredacted["json"]["json"])
 
 
 if __name__ == '__main__':
     app.run()
-
