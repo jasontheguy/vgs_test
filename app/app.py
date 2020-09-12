@@ -9,6 +9,7 @@ app = Flask(__name__)
 USERNAME = os.environ.get('HTTPS_PROXY_USERNAME')
 PASSWORD = os.environ.get('HTTPS_PROXY_PASSWORD')
 TENANT_ID = os.environ.get('TENANT_ID')
+PATH_TO_VGS_PEM = os.environ.get('PATH_TO_VGS_PEM')
 
 #https://stackoverflow.com/questions/54150762/i-want-to-make-pretty-json-formatting-in-flask
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -16,7 +17,7 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 def helper_func_redacted_data():
     #Helper funciton I made to clean up the generate route as it was and still is handling too much.
-    #Basically takes credit card form fields and makes it JSON to send for teknization
+    #Basically takes credit card form fields and makes it JSON to send for tokenization
     card_number = request.form['number']
     expiration = request.form['expiry']
     cvv_code = request.form['cvv']
@@ -60,7 +61,7 @@ def generate():
 
     res = requests.post('https://echo.apps.verygood.systems/post',
                         json=tokenized_data,
-                        verify='/home/flipz/Code/vgs_test/app/cert.pem')
+                        verify=PATH_TO_VGS_PEM)
     json_unredacted = json.loads(res.text)
     #This processes the form and returns a JSON k,v pair
     return render_template('redacted.html',

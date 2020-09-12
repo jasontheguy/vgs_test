@@ -1,24 +1,24 @@
 <html>
-  <head>
-    <link rel="stylesheet" href="static/style.css">
-    <!-- Read more on the URL hash and crossorigin tag here https://www.srihash.org/ -->
-    <script src="http://code.jquery.com/jquery-3.5.1.js"
-    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+
+<head>
+  <link rel="stylesheet" href="static/style.css">
+  <!-- Read more on the URL hash and crossorigin tag here https://www.srihash.org/ -->
+  <script src="http://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
     crossorigin="anonymous"></script>
-  </head>
-  <body>
-    
-    <div id="splash">
-    <img src="static/images.png">   
+</head>
+
+<body>
+
+  <div id="splash">
+    <img src="static/images.png">
     <script>
       // Found a sample JQuery fade in and out animation online. Nothing functional, just looks nice.
-      $().ready(function() {
+      $().ready(function () {
         $("#splash").fadeIn(3000).fadeOut(3000);
       });
-      setTimeout(function() {
-     window.location.href = "card.html";
+      setTimeout(function () {
+        window.location.href = "card.html";
       }, 3000);
-
     </script>
-</div>
-<script>
+  </div>
+  <script>
