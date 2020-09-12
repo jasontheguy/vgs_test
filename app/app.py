@@ -50,7 +50,7 @@ def generate():
     JSON_DATA = helper_func_redacted_data()
     #Note: Credentals are public and this is terrible I know. But, I could not get my environmental variable to be read and interpolated for some reason.
     #All of them are in my .bashrc and I sourced it, but it still wasn't playing nice.
-    os.environ['HTTPS_PROXY'] = 'http://USeBmD52ku1oFv3S9XVQf9SD:d5c3a2d1-a8fd-4a12-a834-0ef085e3bb31@tntkp8h2mvu.SANDBOX.verygoodproxy.com:8080'
+    os.environ['HTTPS_PROXY'] = 'http://:0ef085e3bb31@tntkp8h2mvu.SANDBOX.verygoodproxy.com:8080'
     #This is my public facing API bucket as I couldn't get the echo server to respond properly.
     DETOKENIZED = requests.post('https://2d84d5444b9db4d97485dcd31208da2c.m.pipedream.net/',
                          json=JSON_DATA,
