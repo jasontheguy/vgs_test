@@ -13,3 +13,4 @@ To install, clone this repo wherever you choose.</br>
 Open it and run pip3 install -r requirements.txt to get requirements satisfied.</br>
 Run python3 app.py and navigate to localhost:5000 </br>
 You can see my demo on the final webpage of the application or here https://player.vimeo.com/video/457295471
+<TRIAL>
