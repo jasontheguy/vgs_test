@@ -1,3 +1,7 @@
+---
+vimeoId: 95beec91a4
+---
+
 # vgs_test
 Small Flask application to demonstrate VGS functionality of tokenizing financial information as well as detokenizing it.
 
@@ -12,4 +16,6 @@ Next, for the code to work you must export the following environmental variables
 To install, clone this repo wherever you choose.
 Open it and run pip3 install -r requirements.txt to get requirements satisfied.
 Run python3 app.py and navigate to localhost:5000 </br>
+
+{% include vimeoPlayer.html id=page.vimeoId %}
 
