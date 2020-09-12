@@ -4,20 +4,19 @@ import requests
 import json
 import os
 
-USERNAME = os.environ.get('USERNAME')
-PASSWORD = os.environ.get('PASSWORD')
-TENANT_ID = os.environ.get('TENANT_ID')
-HTTPS_PROXY = "%s:%s@%s.SANDBOX.verygoodproxy.com:8080".format(USERNAME, PASSWORD, TENANT_ID)
-
 app = Flask(__name__)
+
+USERNAME = os.environ.get('HTTPS_PROXY_USERNAME')
+PASSWORD = os.environ.get('HTTPS_PROXY_PASSWORD')
+TENANT_ID = os.environ.get('TENANT_ID')
 
 #https://stackoverflow.com/questions/54150762/i-want-to-make-pretty-json-formatting-in-flask
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
 def helper_func_redacted_data():
-    #Helper funciton I made to clean up generate route as it was and still is handling too much.
-    #Basically takes credit card form fields and makes it JSON
+    #Helper funciton I made to clean up the generate route as it was and still is handling too much.
+    #Basically takes credit card form fields and makes it JSON to send for teknization
     card_number = request.form['number']
     expiration = request.form['expiry']
     cvv_code=request.form['cvv']
@@ -47,16 +46,19 @@ def card():
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    JSON_DATA = helper_func_redacted_data()
+    tokenized_data = helper_func_redacted_data()
     #Note: Credentals are public and this is terrible I know. But, I could not get my environmental variable to be read and interpolated for some reason.
     #All of them are in my .bashrc and I sourced it, but it still wasn't playing nice.
-    os.environ['HTTPS_PROXY'] = 'http://:0ef085e3bb31@tntkp8h2mvu.SANDBOX.verygoodproxy.com:8080'
+    os.environ['HTTPS_PROXY'] = "https://{}:{}@{}.SANDBOX.verygoodproxy.com:8080".format(USERNAME, PASSWORD, TENANT_ID)
+
     #This is my public facing API bucket as I couldn't get the echo server to respond properly.
-    DETOKENIZED = requests.post('https://2d84d5444b9db4d97485dcd31208da2c.m.pipedream.net/',
-                         json=JSON_DATA,
+    res = requests.post('https://echo.apps.verygood.systems/post',
+                         json=tokenized_data,
                          verify='/home/flipz/Code/vgs_test/app/cert.pem')
+    json_unredacted=json.loads(res.text)                 
     #This processes the form and returns a JSON k,v pair
-    return render_template('redacted.html',response=JSON_DATA['data'], detokenized=DETOKENIZED)
+    return render_template('redacted.html',tokenized=tokenized_data['data'], detokenized=json_unredacted["json"]["json"])
+
 
 if __name__ == '__main__':
     app.run()
